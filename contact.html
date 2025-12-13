@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="assets/img/logo.png">
+    
+    <title>Contact - Boutique Électronique</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Cart Sidebar */
+        .cart-sidebar {
+            position: fixed;
+            right: -400px;
+            top: 0;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        .cart-sidebar.open { right: 0; }
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            display: none;
+        }
+        .cart-overlay.show { display: block; }
+        .cart-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+            align-items: center;
+        }
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .cart-item-info {
+            flex: 1;
+        }
+        .cart-item-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .cart-item-price {
+            color: #2563eb;
+            font-weight: bold;
+        }
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            padding: 4px;
+        }
+        .quantity-control button {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: #f3f4f6;
+            cursor: pointer;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .quantity-control button:hover {
+            background: #e5e7eb;
+        }
+        .delete-btn {
+            background: #fee2e2 !important;
+            color: #dc2626;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            cursor: pointer;
+            border: none;
+            transition: background 0.2s;
+        }
+        .delete-btn:hover {
+            background: #fecaca !important;
+        }
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 998;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="border-b border-gray-200 py-2 text-center text-sm">
+            LIVRAISON GRATUITE +500 DH
+        </div>
+
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center flex-1">
+                    <a href="index.html">
+                        <img src="assets/img/logo.png" alt="Logo" class="h-12 md:h-16">
+                    </a>
+                </div>
+
+                <!-- Navigation desktop -->
+                <nav class="hidden md:flex flex-1 justify-center space-x-8">
+                    <a href="index.html" class="text-gray-600 hover:text-gray-900">
+                        Accueil
+                    </a>
+                    <a href="produits.html" class="text-gray-600 hover:text-gray-900">
+                        Catalogue
+                    </a>
+                    <a href="contact.html" class="text-gray-900 font-medium border-b-2 border-gray-900">
+                        Contact
+                    </a>
+                </nav>
+
+                <!-- Panier + hamburger à droite -->
+                <div class="flex items-center">
+                    <button id="cartBtn" class="relative mr-3">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <span id="cartCount" class="absolute -top-2 -right-2 bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                            0
+                        </span>
+                    </button>
+
+                    <!-- Hamburger (mobile) -->
+                    <button id="hamburger" class="md:hidden text-2xl">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overlay menu mobile -->
+        <div id="menuOverlay" class="fixed inset-0 bg-black bg-opacity-40 hidden z-40"></div>
+
+        <!-- Menu mobile coulissant -->
+        <nav id="navMenu" class="fixed top-0 right-0 h-screen w-64 bg-white pt-20 px-6 shadow-lg transform transition-transform duration-300 translate-x-full z-50">
+            <button id="closeMenu" class="absolute top-4 right-4 text-2xl text-gray-700">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <a href="index.html" class="block text-gray-900 font-medium py-3 border-b">Accueil</a>
+            <a href="produits.html" class="block text-gray-600 py-3 border-b">Catalogue</a>
+            <a href="contact.html" class="block text-gray-600 py-3">Contact</a>
+        </nav>
+    </header>
+
+    <!-- Contact Section -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <div class="max-w-6xl mx-auto">
+                <h1 class="text-4xl font-bold text-center mb-4">Contactez-nous</h1>
+                <p class="text-center text-gray-600 mb-12">Nous sommes là pour vous aider</p>
+
+                <div class="grid md:grid-cols-2 gap-12">
+                    <!-- Formulaire de contact -->
+                    <div class="bg-white rounded-lg shadow-lg p-8">
+                        <h2 class="text-2xl font-bold mb-6">Envoyez-nous un message</h2>
+                        <form id="contactForm">
+                            <div class="mb-4">
+                                <label class="block text-gray-700 font-semibold mb-2">Nom complet *</label>
+                                <input type="text" required class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-600">
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="block text-gray-700 font-semibold mb-2">Email *</label>
+                                <input type="email" required class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-600">
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="block text-gray-700 font-semibold mb-2">Téléphone</label>
+                                <input type="tel" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-600">
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="block text-gray-700 font-semibold mb-2">Sujet *</label>
+                                <select required class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-600">
+                                    <option value="">Sélectionnez un sujet</option>
+                                    <option value="informations">Informations générales</option>
+                                    <option value="produit">Question sur un produit</option>
+                                    <option value="commande">Suivi de commande</option>
+                                    <option value="autre">Autre</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-6">
+                                <label class="block text-gray-700 font-semibold mb-2">Message *</label>
+                                <textarea required rows="5" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-600"></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full bg-black text-white py-4 rounded-lg hover:bg-gray-800 transition font-semibold">
+                                <i class="fas fa-paper-plane mr-2"></i> Envoyer le message
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Informations de contact -->
+                    <div>
+                        <div class="bg-gradient-to-br from-blue-900 to-blue-600 text-white rounded-lg shadow-lg p-8 mb-6">
+                            <h2 class="text-2xl font-bold mb-6">Nos coordonnées</h2>
+                            
+                            <div class="space-y-6">
+                                <div class="flex items-start">
+                                    <div class="bg-white bg-opacity-20 rounded-full p-3 mr-4">
+                                        <i class="fab fa-whatsapp text-2xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold mb-1">WhatsApp</h3>
+                                        <p class="text-blue-100">+212 776 759 618</p>
+                                        <a href="https://wa.me/212776759618" target="_blank" class="text-sm underline hover:text-blue-200">Discuter maintenant</a>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start">
+                                    <div class="bg-white bg-opacity-20 rounded-full p-3 mr-4">
+                                        <i class="fas fa-envelope text-2xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold mb-1">Email</h3>
+                                        <p class="text-blue-100">contact@electro-zone.ma</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start">
+                                    <div class="bg-white bg-opacity-20 rounded-full p-3 mr-4">
+                                        <i class="fas fa-map-marker-alt text-2xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold mb-1">Adresse</h3>
+                                        <p class="text-blue-100">Casablanca, Maroc</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start">
+                                    <div class="bg-white bg-opacity-20 rounded-full p-3 mr-4">
+                                        <i class="fas fa-clock text-2xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold mb-1">Horaires</h3>
+                                        <p class="text-blue-100">Lundi - Samedi: 9h - 20h</p>
+                                        <p class="text-blue-100">Dimanche: 10h - 18h</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Réseaux sociaux -->
+                        <div class="bg-white rounded-lg shadow-lg p-8">
+                            <h2 class="text-2xl font-bold mb-6">Suivez-nous</h2>
+                            <div class="flex space-x-4">
+                                <a href="https://www.instagram.com/electrozone_.ma" target="_blank" class="bg-gradient-to-br from-purple-600 to-pink-500 text-white w-14 h-14 rounded-lg flex items-center justify-center text-2xl hover:shadow-lg transition">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                                <a href="https://www.tiktok.com/@electro.zonee6" target="_blank" class="bg-black text-white w-14 h-14 rounded-lg flex items-center justify-center text-2xl hover:shadow-lg transition">
+                                    <i class="fab fa-tiktok"></i>
+                                </a>
+                                <a href="https://wa.me/212776759618" target="_blank" class="bg-green-500 text-white w-14 h-14 rounded-lg flex items-center justify-center text-2xl hover:shadow-lg transition">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                            </div>
+                            <p class="text-gray-600 mt-4">Restez informé de nos dernières offres et nouveautés !</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Overlay -->
+    <div id="cartOverlay" class="cart-overlay"></div>
+
+    <!-- Cart Sidebar -->
+    <div id="cartSidebar" class="cart-sidebar">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Votre panier</h2>
+                <button id="closeCart" class="text-2xl">&times;</button>
+            </div>
+            <div id="cartItems" class="space-y-2 mb-6" style="max-height: 400px; overflow-y: auto;"></div>
+            <div class="border-t pt-4">
+                <div class="flex justify-between text-xl font-bold mb-4">
+                    <span>Total estimé</span>
+                    <span id="cartTotal">0.00 DH</span>
+                </div>
+                <button id="checkoutBtn" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition mb-3">
+                    ACHETER MAINTENANT
+                </button>
+                <p class="text-xs text-gray-600 text-center">📦 Commande avec paiement à la livraison</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Boutique Électronique</h3>
+                    <p class="text-gray-400">Votre destination pour les meilleurs produits électroniques.</p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold mb-4">Liens Rapides</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white">Accueil</a></li>
+                        <li><a href="produits.html" class="text-gray-400 hover:text-white">Catalogue</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold mb-4">Catégories</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Smartphones</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Audio</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Gaming</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold mb-4">Suivez-nous</h4>
+                    <div class="flex space-x-4">
+                        <a href="https://www.tiktok.com/@electro.zonee6" target="_blank" rel="noopener noreferrer" class="text-2xl hover:text-blue-400 transition">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                        <a href="https://www.instagram.com/electro_zone111" target="_blank" rel="noopener noreferrer" class="text-2xl hover:text-pink-400 transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://wa.me/212776759618" target="_blank" rel="noopener noreferrer" class="text-2xl hover:text-green-400 transition">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="tel:+212776759618" class="text-2xl hover:text-green-400 transition">
+                            <i class="fas fa-phone"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Boutique Électronique. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Float -->
+    <a href="https://wa.me/212776759618?text=Bonjour%2C%20je%20veux%20plus%20d'infos%20sur%20un%20produit" target="_blank" class="whatsapp-float">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+        // Gestion du panier
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        const cartBtn = document.getElementById('cartBtn');
+        const cartOverlay = document.getElementById('cartOverlay');
+        const cartSidebar = document.getElementById('cartSidebar');
+        const closeCart = document.getElementById('closeCart');
+        const cartCount = document.getElementById('cartCount');
+        const cartItems = document.getElementById('cartItems');
+        const cartTotal = document.getElementById('cartTotal');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+
+        // Mettre à jour l'affichage du panier
+        function updateCart() {
+            cartItems.innerHTML = '';
+            let total = 0;
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p class="text-gray-600 text-center py-4">Votre panier est vide</p>';
+                cartTotal.textContent = '0.00 DH';
+                cartCount.textContent = '0';
+                return;
+            }
+
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+                cartItem.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+                    <div class="cart-item-info flex-1">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">${item.price} DH</div>
+                    </div>
+                    <div class="quantity-control">
+                        <button onclick="decreaseQty(${index})" class="text-gray-600">-</button>
+                        <span class="px-3">${item.quantity}</span>
+                        <button onclick="increaseQty(${index})" class="text-gray-600">+</button>
+                    </div>
+                    <button onclick="removeFromCart(${index})" class="delete-btn">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                `;
+                cartItems.appendChild(cartItem);
+            });
+
+            cartTotal.textContent = total.toFixed(2) + ' DH';
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
+        // Augmenter la quantité
+        window.increaseQty = function(index) {
+            cart[index].quantity++;
+            updateCart();
+        };
+
+        // Diminuer la quantité
+        window.decreaseQty = function(index) {
+            if (cart[index].quantity > 1) {
+                cart[index].quantity--;
+            } else {
+                removeFromCart(index);
+            }
+            updateCart();
+        };
+
+        // Supprimer du panier
+        window.removeFromCart = function(index) {
+            cart.splice(index, 1);
+            updateCart();
+        };
+
+        // Ouvrir le panier
+        function openCart() {
+            cartSidebar.classList.add('open');
+            cartOverlay.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Fermer le panier
+        function closeCartFunc() {
+            cartSidebar.classList.remove('open');
+            cartOverlay.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        cartBtn.addEventListener('click', openCart);
+        closeCart.addEventListener('click', closeCartFunc);
+        cartOverlay.addEventListener('click', closeCartFunc);
+
+        // Checkout
+        checkoutBtn.addEventListener('click', () => {
+            if (cart.length === 0) return;
+
+            let message = 'Bonjour, je souhaite commander:\n\n';
+            let total = 0;
+
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                message += `${item.name} x${item.quantity} = ${itemTotal} DH\n`;
+            });
+
+            message += `\n*Total: ${total} DH*`;
+
+            const whatsappLink = `https://wa.me/212776759618?text=${encodeURIComponent(message)}`;
+            window.open(whatsappLink, '_blank');
+        });
+
+        // Initialiser le panier
+        updateCart();
+
+        // Gérer le formulaire de contact
+        const contactForm = document.getElementById('contactForm');
+        
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const btn = contactForm.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check mr-2"></i> Message envoyé !';
+            btn.classList.add('bg-green-600');
+            btn.classList.remove('bg-black');
+            
+            setTimeout(() => {
+                contactForm.reset();
+                btn.innerHTML = originalText;
+                btn.classList.remove('bg-green-600');
+                btn.classList.add('bg-black');
+            }, 3000);
+        });
+
+        // Gérer le menu mobile
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+        const closeMenu = document.getElementById('closeMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
+
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.remove('translate-x-full');
+            menuOverlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        });
+
+        function closeMenuFunc() {
+            navMenu.classList.add('translate-x-full');
+            menuOverlay.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        closeMenu.addEventListener('click', closeMenuFunc);
+        menuOverlay.addEventListener('click', closeMenuFunc);
+
+        navMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', closeMenuFunc);
+        });
+    </script>
+</body>
+</html>

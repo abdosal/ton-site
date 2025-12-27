@@ -240,6 +240,29 @@
                 </div>
             </div>
 
+            <div class="product-card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition" data-category="audio">
+                <div class="relative">
+                    <img src="assets/img/produits/airpods-problack.jpg" alt="AirPods Pro 2" class="w-full h-64 object-cover">
+                </div>
+                <div class="p-4">
+                    <h3 class="font-semibold text-lg mb-2">AirPods Pro 2 black </h3>
+                    <p class="text-2xl font-bold text-blue-600 mb-3">99 DH</p>
+                    <button onclick="toggleDetails(this)" class="text-sm text-gray-600 hover:text-blue-600 mb-3 flex items-center">
+                        <i class="fas fa-info-circle mr-2"></i>Voir les caractéristiques
+                    </button>
+                    <div class="product-details border-t pt-3 mb-3">
+                        <div class="product-specs text-left space-y-1">
+                            <p>🔇 ANC + Mode Transparence</p>
+                            <p>🎧 Son premium</p>
+                            <p>💧 Résistance IPX4</p>
+                        </div>
+                    </div>
+                    <button class="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition add-to-cart"
+                            data-id="2" data-name="AirPods Pro 2 black " data-price="99" data-image="assets/img/produits/airpods-problack.jpg">
+                        Ajouter au panier
+                    </button>
+                </div>
+            </div>
             <!-- 3 : AirPod Max -->
             <div class="product-card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition" data-category="audio">
                 <div class="relative">
@@ -267,30 +290,7 @@
             </div>
 
             <!-- 4 : cover iPhone -->
-            <div class="product-card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition" data-category="accessories">
-                <div class="relative">
-                    <img src="assets/img/produits/cover-iphone.jpg" alt="cover iPhone" class="w-full h-64 object-cover">
-                </div>
-                <div class="p-4">
-                    <h3 class="font-semibold text-lg mb-2">cover iPhone</h3>
-                    <p class="text-2xl font-bold text-blue-600 mb-3">59 DH</p>
-                    <button onclick="toggleDetails(this)" class="text-sm text-gray-600 hover:text-blue-600 mb-3 flex items-center">
-                        <i class="fas fa-info-circle mr-2"></i>Voir les caractéristiques
-                    </button>
-                    <div class="product-details border-t pt-3 mb-3">
-                        <div class="product-specs text-left space-y-1">
-                            <p>🛡️ Protection renforcée</p>
-                            <p>👌 Matériau silicone</p>
-                            <p>✨ Design élégant</p>
-                        </div>
-                    </div>
-                    <button class="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition add-to-cart"
-                            data-id="4" data-name="cover iPhone" data-price="60" data-image="assets/img/produits/cover-iphone.jpg">
-                        Ajouter au panier
-                    </button>
-                </div>
-            </div>
-
+            
             <!-- 5 : Chargeur iphone -->
             <div class="product-card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition" data-category="accessories">
                 <div class="relative">
@@ -419,29 +419,29 @@
             </div>
 
             <!-- 10 : Power bank xiaomi -->
-            <div class="product-card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition" data-category="battery">
-                <div class="relative">
-                    <img src="assets/img/produits/power-bang.jpg" alt="Power bank xiaomi" class="w-full h-64 object-cover">
-                </div>
-                <div class="p-4">
-                    <h3 class="font-semibold text-lg mb-2">Power bank xiaomi</h3>
-                    <p class="text-2xl font-bold text-blue-600 mb-3">179 DH</p>
-                    <button onclick="toggleDetails(this)" class="text-sm text-gray-600 hover:text-blue-600 mb-3 flex items-center">
-                        <i class="fas fa-info-circle mr-2"></i>Voir les caractéristiques
-                    </button>
-                    <div class="product-details border-t pt-3 mb-3">
-                        <div class="product-specs text-left space-y-1">
-                            <p>🔋 Capacité 20000mAh</p>
-                            <p>⚡ Charge rapide 18W</p>
-                            <p>📱 3 ports USB</p>
-                        </div>
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition" data-category="battery">
+                    <div class="relative">
+                        <img src="assets/img/produits/power-bang.jpg" alt="Power bank xiaomi" class="w-full h-64 object-cover">
                     </div>
-                    <button class="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition add-to-cart"
-                            data-id="10" data-name="Power bank xiaomi" data-price="180" data-image="assets/img/produits/power-bang.jpg">
-                        Ajouter au panier
-                    </button>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-lg mb-2">Power bank xiaomi</h3>
+                        <p class="text-2xl font-bold text-blue-600 mb-3">179 DH</p>
+                        <button onclick="toggleDetails(this)" class="text-sm text-gray-600 hover:text-blue-600 mb-3 flex items-center">
+                            <i class="fas fa-info-circle mr-2"></i>Voir les caractéristiques
+                        </button>
+                        <div class="product-details border-t pt-3 mb-3">
+                            <div class="product-specs text-left space-y-1">
+                                <p>🔋 Capacité 20000mAh</p>
+                                <p>⚡ Charge rapide 18W</p>
+                                <p>📱 3 ports USB</p>
+                            </div>
+                        </div>
+                        <button class="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition add-to-cart"
+                                data-id="10" data-name="Power bank xiaomi" data-price="180" data-image="assets/img/produits/power-bang.jpg">
+                            Ajouter au panier
+                        </button>
+                    </div>
                 </div>
-            </div>
 
             <!-- 11 : TV Box Xiaomi -->
             <div class="product-card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition" data-category="accessories">
@@ -545,7 +545,77 @@
                 </div>
             </div>
 
+            <div class="product-card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition" data-category="headphones">
+    <div class="relative">
+        <img src="assets/img/produits/sony-ult-wear.jpg" alt="Casque Sony ULT WEAR" class="w-full h-64 object-cover">
+    </div>
+    <div class="p-4">
+        <h3 class="font-semibold text-lg mb-2">Casque Sony ULT WEAR</h3>
+        <p class="text-2xl font-bold text-blue-600 mb-3">249 DH</p>
+        <button onclick="toggleDetails(this)" class="text-sm text-gray-600 hover:text-blue-600 mb-3 flex items-center">
+            <i class="fas fa-info-circle mr-2"></i>Voir les caractéristiques
+        </button>
+
+        <div class="product-details border-t pt-3 mb-3">
+            <div class="product-specs text-left space-y-1">
+                <p>🎧 Réduction de bruit active (processeur V1)</p>
+                <p>🎛 Bouton ULT POWER SOUND (2 modes de basses)</p>
+                <p>🔋 Autonomie jusqu’à 30h (NC on) / 50h (NC off)</p>
+                <p>🔗 Bluetooth 5.2 + connexion multipoint</p>
+                <p>🎙️ Micro multidirectionnel pour appels clairs</p>
+                <p>⚡ Charge rapide USB‑C (10min → 5h d’écoute)</p>
+            </div>
         </div>
+
+            <button
+                class="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition add-to-cart"
+                data-id="21"
+                data-name="Casque Sony ULT WEAR"
+                data-price="249"
+                data-image="assets/img/produits/sony-ult-wear.jpg">
+                Ajouter au panier
+            </button>
+            </div>
+        </div>
+        
+        <div class="product-card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition" data-category="smartwatch">
+    <div class="relative">
+        <img src="assets/img/produits/hr2-ultra2.jpg" alt="Smart watch HR2 ULTRA 2 + Earphones" class="w-full h-64 object-cover">
+    </div>
+        <div class="p-4">
+            <h3 class="font-semibold text-lg mb-2">Smart Watch HR2 ULTRA 2 + Écouteurs</h3>
+            <p class="text-2xl font-bold text-blue-600 mb-3">199 DH</p>
+
+            <button onclick="toggleDetails(this)" class="text-sm text-gray-600 hover:text-blue-600 mb-3 flex items-center">
+                <i class="fas fa-info-circle mr-2"></i>Voir les caractéristiques
+            </button>
+
+            <div class="product-details border-t pt-3 mb-3">
+                <div class="product-specs text-left space-y-1">
+                    <p>⌚ Écran 1.9" HD tactile couleur</p>
+                    <p>📞 Appels Bluetooth + notifications (Android / iOS)</p>
+                    <p>🏃 Suivi sportif, podomètre, fréquence cardiaque</p>
+                    <p>🎧 Écouteurs sans fil inclus avec boîtier de charge</p>
+                    <p>🔋 Batterie 350 mAh, jusqu’à 5–7 jours d’utilisation</p>
+                    <p>💧 Résistance aux éclaboussures (usage quotidien)</p>
+                </div>
+            </div>
+
+            <button
+                class="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition add-to-cart"
+                data-id="31"
+                data-name="Smart Watch HR2 ULTRA 2 + Écouteurs"
+                data-price="199"
+                data-image="assets/img/produits/hr2-ultra2.jpg">
+                Ajouter au panier
+            </button>
+            </div>
+            
+        </div>
+
+
+
+    </div>
     </main>
 
     <!-- Cart Overlay -->
